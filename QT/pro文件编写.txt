@@ -1,0 +1,72 @@
+1、输出问题：
+	1.1. Commonlib等静态库: 主程序Mainproject只链接
+		win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Commonlib/lib/ -lCommonLib
+		else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Commonlib/lib/ -lCommonLibd
+		else:unix: LIBS += -L$$PWD/Commonlib/lib/ -lCommonLib
+
+		INCLUDEPATH += $$PWD/Commonlib/include
+		DEPENDPATH += $$PWD/Commonlib/include
+
+		win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/Commonlib/lib/libCommonLib.a
+		else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/Commonlib/lib/libCommonLibd.a
+		else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/Commonlib/lib/CommonLib.lib
+		else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/Commonlib/lib/CommonLibd.lib
+		else:unix: PRE_TARGETDEPS += $$PWD/Commonlib/lib/libCommonLib.a
+		
+	1.2. Tools等动态库：主程序链接，并且输出到指定路径
+		win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Tools/lib/ -lTools
+		else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Tools/lib/ -lToolsd
+		else:unix: LIBS += -L$$PWD/Tools/lib/ -lTools
+
+		INCLUDEPATH += $$PWD/Tools/include
+		DEPENDPATH += $$PWD/Tools/include
+		
+		CONFIG(debug,debug|release){
+			DLLDESTDIR = $$OUT_PWD/../MainProject/debug
+		} else {
+			DLLDESTDIR = $$OUT_PWD/../MainProject/release
+			DLLDESTDIR = $$PWD/../Release
+		}
+		
+	1.3. 主程序MainProject:
+		CONFIG(release,debug|release)
+		{
+			DESTDIR = $$PWD/../Release
+		}
+		
+2.编译顺序
+	TEMPLATE = subdirs
+
+	SUBDIRS += \
+		MainProject \
+		Tools \
+		CommonLib \
+
+	Tools.subdir = $$_PRO_FILE_PWD_/Tools
+	CommonLib.subdir = $$_PRO_FILE_PWD_/CommonLib
+	MainProject.subdir = $$_PRO_FILE_PWD_/MainProject
+
+	CommonLib.depends = Tools
+	MainProject.depends = Tools CommonLib
+
+3.第三方库形式
+	3.1. Commonlib 视为一个静态库，文件夹内为include + lib
+	3.2. Tools 视为一个动态库，文件夹内为include + lib + bin
+	3.3. SourceCode .h/.cpp文件 加入项目进行编译
+
+4.库文件复制到指定路径
+	CONFIG(debug, debug|release){
+		tools_dll.files = $$PWD/Tools/bin/Toolsd.dll
+		tools_dll.path = $$OUT_PWD/debug
+	} else {
+		tools_dll.files = $$PWD/Tools/bin/Tools.dll
+		tools_dll.path = $$OUT_PWD/release
+	}
+	COPIES += tools_dll
+	
+5.输出名字
+	CONFIG(debug, debug|release) {
+		TARGET = CommonLibd
+	} else {
+		TARGET = CommonLib
+	}

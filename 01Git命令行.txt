@@ -1,0 +1,46 @@
+1.基本命令
+	1.1.git status: 查看Git仓库状态，包括分支信息、未提交信息、工作树状态、暂存区状态
+	1.2.git branch (-r): 列出所有分支
+	1.3.git log -2: 查看提交日志
+	1.4.git checkout <branch_name>: 切换到指定分支
+	1.5.git remote -v: 显示远程仓库的信息
+	1.6.git tag: 查看所有标签
+	1.7.git init: 在当前目录初始化一个新的Git仓库
+	1.8.git clone <repository_url>: 克隆一个远程仓库到本地
+	1.9.git add <file>: 将文件添加到暂存区
+	1.10.git commit -m "commit message": 提交暂存区中的文件并附上提交信息
+	1.11.git push: 将本地代码推送到远程仓库
+	1.12.git pull: 从远程仓库拉取到最新的更新
+	1.13.git merge <branch_name>: 将指定分支合并到当前分支
+	1.14.git fetch: 从远程仓库下载对象和引用
+
+2.建立git分支
+	2.1.查看当前分支: git branch
+	2.2.新建立分支: git branch <branch_name>
+	2.3.切换到新分支: git checkout <branch_name>
+	2.4.推到远程仓库: git push
+
+3.删除git分支
+	3.1.查看当前分支: git branch
+	3.2.删除分支: git branch -d/-D <branch_name>
+	3.3.切换到新分支: git checkout <branch_name>
+	3.4.推到远程仓库: git push origin --delete <branch_name>
+
+4.本地回退到之前的版本
+	4.1.查看退回版本的commit hash: git log -2
+	4.2.切换到指定版本哈希值: git checkout <commit-hash>
+	4.3.查看历史提交记录: git log -2
+
+5.克隆一个远程仓库到本地:
+	5.1.克隆远程仓库: git clone <repository_url>  "git clone https://github.com/username/repository.git"
+	5.2.查看所有远程分支: git branch
+	5.3.切换到需要的分支: git checkout <branch_name>
+
+6.提交代码到远程仓库
+	6.1.添加文件到暂存区: git add <file>
+	6.2.提交文件: git commit -m "message"
+	6.3.推送到远程仓库: git push origin <branch_name>
+
+7.git重置到之前的版本
+8.git生成ssh密钥
+

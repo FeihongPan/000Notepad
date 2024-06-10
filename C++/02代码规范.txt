@@ -1,0 +1,49 @@
+1、Setter函数：参数以常引用的方式传入 
+	inline void SetData(const Data& data) { m_Data = data; }
+	inline void SetData(const Data* &data);
+
+2、Getter函数：返回成员变量时返回常引用，返回局部变量时返回值
+	inline const Data& GetData() { return m_data; }
+	inline const Data& GetData(): 前面的const限制指针指向的地址数据，后面的const限制指针本身
+
+3、完整类（单例）：
+	a.析构函数：
+		～AppConfig();
+	b.单例模式：
+		static AppConfig& getInstance()
+		{
+			static AppConfig Instance("AppConfig");
+			return Instance;
+		}
+	c.构造函数：
+		AppConfig(QString name);
+	d.拷贝构造函数：
+		AppConfig(const AppConfig& instance);
+	e.赋值函数：
+		AppConfig& operator=(const AppConfig& instance)
+		{
+			return *this;
+		}
+
+4、派生类完整写法
+	c.构造函数：
+		AppConfigDerived(QString name) : AppConfig(name) { }
+	d.拷贝构造函数：
+		AppConfigDerived(const AppConfigDerived& instance) : AppConfig(instance) 
+	e.赋值函数：
+		AppConfigDerived& operator=(const AppConfigDerived& instance) 
+		{ 
+			AppConfig::operator=(instance);
+		}
+		
+5、常函数: 函数为常量
+	inline const Data& GetData() const
+	{
+		return m_Data;
+	}
+	a.常量函数不可以改变类的数据成员:
+		inline const Data& GetData() const { m_Data = data; }
+	b.不可以把类的数据成员暴露在外部进行修改
+		例如: QString& GetID() const { return m_nID; };
+	c.常用三个const的情况:
+		 inline const Data& GetData(const int& nID) const;
